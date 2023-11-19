@@ -14,19 +14,20 @@ html, body {
 }
 
 .ul-endorsements-list {
-    background: #FFF;
     color: #000;
     list-style-type: none;
-    padding: 10px;
     width: 400px;
+    padding: 0;
+}
+
+.ul-endorsements-list li {
+    background: #FFF;
+    padding: 10px;
+    margin: 0 0 10px 0;
 }
 
 .ul-endorsements-list h5 {
     margin: 0;
-}
-
-.p-heart {
-   text-align: right;
 }
 
 .ul-endorsements-list li > p  {
@@ -46,4 +47,24 @@ html, body {
 .ul-endorsements-list li div > * {
     margin: 0;
     flex: 1 0 0;
+}
+
+.ul-endorsements-list span {
+    cursor: pointer;
+}
+
+.p-btn {
+   text-align: right;
+}
+
+.btn-del {
+    margin-right: 8px;
+}
+
+.span-heart-count {
+    margin-right: 4px
+}
+
+.btn-heart {
+
 }
