@@ -1,11 +1,39 @@
 <!doctype html>
 <html>
     <head><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
-        <title>We are the Champions</title>
+        <title>We are the Champions.</title>
         <link rel="stylesheet" href="index.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Questrial&display=swap" rel="stylesheet">
     </head>
     <body>
-        <h1>We are the Champions</h1>
-        <script src="index.js"></script>
+        <main id="main">
+            <div id="container-header">
+                <img class="logo" src="./assets/freddie.png">
+                <h1>We are the Champions</h1>
+            </div>
+            <section id="container-new-endorsement">
+                <input class="inpt-endorsement" id="txt-new-endorsement" type="textarea" placeholder="Write your endorsement here">
+                <input class="inpt-to" type="text" placeholder="From">
+                <input class="inpt-from" type="text" placeholder="To">
+                <button class="btn-publish" id="btn-publish">Publish</button>
+            </section>
+            <section id="container-endorsements">
+                <h2 id="h2-endorsements">- Endorsements -</h2>
+                <ul class="ul-endorsements-list" id="ul-endorsements-list">
+                    <li>
+                        <h5>To Leanne</h5>
+                        <p>Leanne! Thank you so much for helping me with the March Accounting</p>
+                        <div>
+                            <h5>From Jimmy</h5>
+                            <p class="p-heart">♡♥</p>
+                        </div>
+                        
+                    </li>
+                </ul>
+            </section>
+            <script src="index.js" type="module"></script>
+        </main>
     </body>
 </html>

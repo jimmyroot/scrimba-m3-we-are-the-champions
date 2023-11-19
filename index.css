@@ -1,4 +1,49 @@
+*, *::after, *::before { box-sizing: inherit; }
+
 html, body {
     margin: 0;
     padding: 0;
+    font-family: 'Josefin Sans', sans-serif;
+    background: #1B1924;
+    color: #ffffff;
+    box-sizing: border-box;
+}
+
+.logo {
+    width: 90px;
+}
+
+.ul-endorsements-list {
+    background: #FFF;
+    color: #000;
+    list-style-type: none;
+    padding: 10px;
+    width: 400px;
+}
+
+.ul-endorsements-list h5 {
+    margin: 0;
+}
+
+.p-heart {
+   text-align: right;
+}
+
+.ul-endorsements-list li > p  {
+    margin: 10px 0;
+}
+
+.ul-endorsements-list li div {
+    display: flex;
+}
+
+.ul-endorsements-list li div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.ul-endorsements-list li div > * {
+    margin: 0;
+    flex: 1 0 0;
 }
