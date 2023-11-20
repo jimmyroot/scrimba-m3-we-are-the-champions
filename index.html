@@ -5,31 +5,39 @@
         <link rel="stylesheet" href="index.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Questrial&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;700&family=Josefin+Sans:wght@300;500&display=swap" rel="stylesheet">
+        <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+        <link rel="manifest" href="assets/site.webmanifest">
     </head>
     <body>
         <main id="main">
             <div id="container-header">
-                <img class="logo" src="./assets/freddie.png">
+                <img class="logo" alt="Logo, a silhouette of Freddie Mercury holding his microphone in the air" src="./assets/freddie.png">
                 <h1>We are the Champions</h1>
             </div>
-            <section id="container-new-endorsement">
-                <input class="inpt-endorsement" id="inpt-endorsement-el" type="textarea" placeholder="Write your endorsement here">
-                <input class="inpt-to" id="inpt-to-el" type="text" placeholder="From">
-                <input class="inpt-from" id="inpt-from-el" type="text" placeholder="To">
+            <section class="container-new-endorsement">
+                <textarea class="inpt-endorsement" id="inpt-endorsement-el" placeholder="Write your endorsement here" maxlength="140"></textarea>
+                <div>
+                    <input class="inpt-names" id="inpt-from-el" type="text" placeholder="From">
+                    <input class="inpt-names" id="inpt-to-el" type="text" placeholder="To">
+                </div>
                 <button class="btn-publish" id="btn-publish">Publish</button>
             </section>
-            <section id="container-endorsements">
-                <h2 id="h2-endorsements">- Endorsements -</h2>
+            <section class="container-endorsements">
+                <h2>- Endorsements -</h2>
                 <ul class="ul-endorsements-list" id="ul-endorsements-list">
                     <li>
-                        <h5>To Leanne</h5>
+                        <div>
+                            <h5>To Leanne</h5>
+                            <p class="p-btn"><span>Ⅹ</span></p>
+                        </div>
                         <p>Leanne! Thank you so much for helping me with the March Accounting</p>
                         <div>
                             <h5>From Jimmy</h5>
-                            <p class="p-heart">♡♥</p>
+                            <p class="p-btn"><span>♡</span><span class="span-heart-count">0</span></p>
                         </div>
-                        
                     </li>
                 </ul>
             </section>

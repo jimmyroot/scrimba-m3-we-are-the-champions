@@ -3,35 +3,118 @@
 html, body {
     margin: 0;
     padding: 0;
-    font-family: 'Josefin Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     background: #1B1924;
     color: #ffffff;
     box-sizing: border-box;
+}
+
+h1, h2 {
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 300;
+}
+
+h1 {
+    margin: 17px 0 19px 0;
+}
+
+main {
+    width: 390px;
+    text-align: center;
+    margin: 30px auto;
+    padding: 36px;
+}
+
+input {
+    font-size: 16px;
+}
+
+button {
+    background: #28A9F1;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    padding: 17px 0 12px 0;
+    cursor: pointer;
+}
+
+button:hover {
+    box-shadow: inset 0 0 40px 0 rgba(10, 10, 70, 0.3);
+}
+
+textarea, input {
+    background: #444059;
+    color: #FFF;
+    border: none;
+    border-radius: 8px;
+}
+
+textarea::placeholder, input::placeholder {
+    color: #8F8F8F;
+}
+
+textarea:focus, input:focus {
+    outline: 1px solid #28a9f1;
 }
 
 .logo {
     width: 90px;
 }
 
+.container-endorsements h2 {
+    font-size: 20px;
+    margin: 15px 0 15px 0;
+}
+
+.inpt-endorsement {
+    height: 118px;
+    padding: 10px;
+    resize: none;
+}
+
+.inpt-names {
+    width: 100%;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.container-new-endorsement {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.container-new-endorsement div {
+    display: flex;
+    gap: 10px
+}
+
 .ul-endorsements-list {
     color: #000;
     list-style-type: none;
-    width: 400px;
     padding: 0;
+    margin: 0;
 }
 
 .ul-endorsements-list li {
     background: #FFF;
     padding: 10px;
-    margin: 0 0 10px 0;
+    margin: 0 0 13px 0;
 }
 
 .ul-endorsements-list h5 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    text-align: left;
     margin: 0;
 }
 
 .ul-endorsements-list li > p  {
+    text-align: left;
+    font-size: 14px;
     margin: 10px 0;
+    font-family: 'Inter', sans-serif;
 }
 
 .ul-endorsements-list li div {
@@ -46,7 +129,7 @@ html, body {
 
 .ul-endorsements-list li div > * {
     margin: 0;
-    flex: 1 0 0;
+    flex-grow: 1;
 }
 
 .ul-endorsements-list span {
@@ -55,16 +138,31 @@ html, body {
 
 .p-btn {
    text-align: right;
-}
-
-.btn-del {
-    margin-right: 8px;
+   user-select: none;
 }
 
 .span-heart-count {
-    margin-right: 4px
+    display: inline-block;
+    width: 16px;
 }
 
-.btn-heart {
+.inpt-empty-field {
+    outline: 1px solid red;
+}
 
+.ul-endorsements-list {
+    font-family: Inter, sans-serif;
+    font-size: 14px;
+    background-color: #1B1924;
+    color: #FFF
+}
+
+.ul-endorsements-list .li-nothing-here-yet {
+    background-color: rgba(0, 0, 0, 0);
+    color: #726d8b;
+}
+
+/* Utility class */
+.border {
+    border: 1px solid hotpink;
 }
