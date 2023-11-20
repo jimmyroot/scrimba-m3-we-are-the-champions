@@ -105,6 +105,7 @@ textarea:focus, input:focus {
 
 .ul-endorsements-list h5 {
     font-family: 'Inter', sans-serif;
+    font-size: 14px;
     font-weight: 700;
     text-align: left;
     margin: 0;
@@ -143,7 +144,8 @@ textarea:focus, input:focus {
 
 .span-heart-count {
     display: inline-block;
-    width: 16px;
+    width: 12px;
+    font-weight: 700;
 }
 
 .inpt-empty-field {
@@ -154,12 +156,14 @@ textarea:focus, input:focus {
     font-family: Inter, sans-serif;
     font-size: 14px;
     background-color: #1B1924;
-    color: #FFF
+    color: #1B1924
 }
 
 .ul-endorsements-list .li-nothing-here-yet {
     background-color: rgba(0, 0, 0, 0);
     color: #726d8b;
+    padding: 0 30px;
+    line-height: 1.4;
 }
 
 /* Utility class */
