@@ -164,4 +164,5 @@ double digits */
     display: inline-block;
     width: 12px;
     font-weight: 700;
+    cursor: default;
 }
