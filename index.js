@@ -1,6 +1,3 @@
-// TODO 1: Pretty much all of the CSS
-// TODO 5: Sort out fonts, import Inter, etc
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
 import { getDatabase, ref, push, onValue, remove, set } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
 
@@ -25,14 +22,6 @@ onValue(endorsements, function(snapshot) {
     snapshot.exists() ? renderEndorsementList(snapshot.val()) : nothingHereYet()
 })
 
-function nothingHereYet() {
-    clearEndorsementList()
-    let li = document.createElement('li')
-    li.innerText = 'No endorsements to see...yet. Go on, you know you want to ;-)'
-    li.classList.add("li-nothing-here-yet")
-    ulEndorsementsEl.append(li)
-}
-
 // Function to render the list
 function renderEndorsementList(val) {
     // First clear the current li's from the list...
@@ -48,7 +37,7 @@ function renderEndorsementList(val) {
 }
 
 function buildEndorsementListItem(endorsement) {
-    // Get id and object
+    // Split out the id and object
     let id = endorsement[0]
     let endorsementObj = endorsement[1]
     
@@ -143,7 +132,9 @@ function clearInputs() {
     }
 }
 
-// Function to add/remove heart
+// Function to add/remove heart, update the db with heart count
+// and drop an item in localStorage with the id of the endorsement
+// we liked
 function toggleHeart(id, endorsementObj) {
     if (hasHearted(id)) {
         endorsementObj.hearts--
@@ -161,37 +152,42 @@ function hasHearted(id) {
     return id in localStorage
 }
 
-// Function to check if a given field element is empty, and decorate it accordingly
+// Function to check if the specified input element is empty
 function fieldIsEmpty(fieldEl) {
-    if (fieldEl.value.length === 0) {
-        fieldEl.classList.add("inpt-empty-field")
-        return true
-    } else {
-        return false;
-    }
+    return fieldEl.value.length === 0
 }
 
-// Function to add or remove a 'warning' class from the
+// Function to add or remove a 'warning' class from a specified input element
 function setFieldWarningClass(fieldEl, shouldSet) {
     shouldSet ? fieldEl.classList.add('inpt-empty-field') : fieldEl.classList.remove('inpt-empty-field')
 }
 
-// Set up event listeners
+// Function: insert a specially formatted list item with text to display if there is
+// nothing in the datbase
+function nothingHereYet() {
+    clearEndorsementList()
+    let li = document.createElement('li')
+    li.innerText = 'No endorsements to see...yet. Go on, you know you want to ;-)'
+    li.classList.add("li-nothing-here-yet")
+    ulEndorsementsEl.append(li)
+}
+
+// Set up publish button event listener
 btnPublishEl.addEventListener('click', function() {
 
     // Test all the fields to see if they are empty, must be a simpler way?
-    let goodToGo = true
+    let greenLight = true
     const fieldEls = [inptToEl, inptFromEl, inptEndorsementEl]
 
     for (const fieldEl of fieldEls) {
         if (fieldIsEmpty(fieldEl)) {
-            goodToGo = false
+            greenLight = false
             setFieldWarningClass(fieldEl, true);
         }
     }
 
-    // If all the fields are filled out, build new obj and push to db
-    if (goodToGo) {
+    // If all the fields are filled out, build new obj, push to db, clear input fields
+    if (greenLight) {
         const newEndorsement = {
             to: inptToEl.value,
             from: inptFromEl.value,

@@ -9,6 +9,13 @@ html, body {
     box-sizing: border-box;
 }
 
+main {
+    width: 390px;
+    text-align: center;
+    margin: 30px auto;
+    padding: 36px;
+}
+
 h1, h2 {
     font-family: 'Josefin Sans', sans-serif;
     font-weight: 300;
@@ -18,11 +25,19 @@ h1 {
     margin: 17px 0 19px 0;
 }
 
-main {
-    width: 390px;
-    text-align: center;
-    margin: 30px auto;
-    padding: 36px;
+textarea, input {
+    background: #444059;
+    color: #FFF;
+    border: none;
+    border-radius: 8px;
+}
+
+textarea::placeholder, input::placeholder {
+    color: #8F8F8F;
+}
+
+textarea:focus, input:focus {
+    outline: 1px solid #28a9f1;
 }
 
 input {
@@ -44,28 +59,19 @@ button:hover {
     box-shadow: inset 0 0 40px 0 rgba(10, 10, 70, 0.3);
 }
 
-textarea, input {
-    background: #444059;
-    color: #FFF;
-    border: none;
-    border-radius: 8px;
-}
-
-textarea::placeholder, input::placeholder {
-    color: #8F8F8F;
-}
-
-textarea:focus, input:focus {
-    outline: 1px solid #28a9f1;
-}
-
 .logo {
     width: 90px;
 }
 
-.container-endorsements h2 {
-    font-size: 20px;
-    margin: 15px 0 15px 0;
+.container-new-endorsement {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.container-new-endorsement div {
+    display: flex;
+    gap: 10px
 }
 
 .inpt-endorsement {
@@ -80,21 +86,30 @@ textarea:focus, input:focus {
     text-align: center;
 }
 
-.container-new-endorsement {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.inpt-empty-field {
+    outline: 1px solid red;
 }
-.container-new-endorsement div {
-    display: flex;
-    gap: 10px
+
+.container-endorsements h2 {
+    font-size: 20px;
+    margin: 15px 0 15px 0;
 }
 
 .ul-endorsements-list {
-    color: #000;
-    list-style-type: none;
+    background-color: #1B1924;
+    font-family: Inter, sans-serif;
+    font-size: 14px;
     padding: 0;
     margin: 0;
+    color: #1B1924;
+    list-style-type: none;
+}
+
+.ul-endorsements-list .li-nothing-here-yet {
+    background-color: rgba(0, 0, 0, 0);
+    color: #726d8b;
+    padding: 0 30px;
+    line-height: 1.4;
 }
 
 .ul-endorsements-list li {
@@ -104,7 +119,6 @@ textarea:focus, input:focus {
 }
 
 .ul-endorsements-list h5 {
-    font-family: 'Inter', sans-serif;
     font-size: 14px;
     font-weight: 700;
     text-align: left;
@@ -115,7 +129,6 @@ textarea:focus, input:focus {
     text-align: left;
     font-size: 14px;
     margin: 10px 0;
-    font-family: 'Inter', sans-serif;
 }
 
 .ul-endorsements-list li div {
@@ -142,31 +155,13 @@ textarea:focus, input:focus {
    user-select: none;
 }
 
+/* This was the only way I could find not to make the heart
+jump around when the count text changes (the span grows and
+pushes the heart. Fixing the width of the span prevents it 
+changing size as long as the number stays in single or 
+double digits */
 .span-heart-count {
     display: inline-block;
     width: 12px;
     font-weight: 700;
-}
-
-.inpt-empty-field {
-    outline: 1px solid red;
-}
-
-.ul-endorsements-list {
-    font-family: Inter, sans-serif;
-    font-size: 14px;
-    background-color: #1B1924;
-    color: #1B1924
-}
-
-.ul-endorsements-list .li-nothing-here-yet {
-    background-color: rgba(0, 0, 0, 0);
-    color: #726d8b;
-    padding: 0 30px;
-    line-height: 1.4;
-}
-
-/* Utility class */
-.border {
-    border: 1px solid hotpink;
 }
