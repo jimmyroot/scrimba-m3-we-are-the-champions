@@ -18,8 +18,59 @@ const inptFromEl = document.getElementById("inpt-from-el")
 const inptEndorsementEl = document.getElementById("inpt-endorsement-el")
 
 // onValue call, render list or call another function if db is empty
+// Putting it here lets us see immediately core functionality when we open
+// the .js file
 onValue(endorsements, function(snapshot) {
     snapshot.exists() ? renderEndorsementList(snapshot.val()) : nothingHereYet()
+})
+
+// Putting event listeners here for the same reason as above—core functionalty
+// near the top of the file makes it easier for other developers to review
+
+// Add keypress event to revert warning when field no longer empty
+const fieldEls = [inptToEl, inptFromEl, inptEndorsementEl]
+for (const fieldEl of fieldEls) {
+    fieldEl.addEventListener('keypress', function() {
+        setFieldWarningClass(fieldEl, false)
+    })
+}
+
+// Set up publish button event listener
+btnPublishEl.addEventListener('click', function() {
+
+    // Cleaner version from code review
+    if (inptFromEl.value && inptEndorsementEl.value && inptToEl.value) {
+        const newEndorsement = {
+            to: inptToEl.value,
+            from: inptFromEl.value,
+            endorsement: inptEndorsementEl.value,
+            hearts: 0
+        }
+        pushEndorsementToDb(newEndorsement)
+        clearInputs()
+    } else {
+        const fieldEls = [inptToEl, inptFromEl, inptEndorsementEl]
+        for (const fieldEl of fieldEls) {
+            if (!fieldEl.value) {
+                setFieldWarningClass(fieldEl, true)
+            }
+        }
+    }
+})
+
+// Document event listener scoped to delete and like buttons
+document.addEventListener('click', function(event) {
+    const id = event.target.dataset.id
+    if (id) {
+        const op = event.target.dataset.type
+        if (op === 'heart') {
+            const endorsementData = JSON.parse(event.target.dataset.endorsement)
+            toggleHeart(id, endorsementData)
+        } else if (op === 'delete') {
+            const endorsementToDelete = ref(db, `endorsements/${id}`)
+            remove(endorsementToDelete)
+        }
+    }
 })
 
 // Function to render the list
@@ -28,73 +79,58 @@ function renderEndorsementList(val) {
     clearEndorsementList()
 
     // Now build each item from the array
-    let allEndorsements = Object.entries(val).reverse()
+    const allEndorsements = Object.entries(val).reverse()
     
-    for (let i = 0; i < allEndorsements.length; i++) {
-        let currentEndorsement = allEndorsements[i]
+    // Changed to modern style loop instead of C style
+    for (const currentEndorsement of allEndorsements) {
         appendEndorsementToList(currentEndorsement)
     }
 }
 
+// Function to build and return a li from the endorsement object passed in
 function buildEndorsementListItem(endorsement) {
+
     // Split out the id and object
-    let id = endorsement[0]
-    let endorsementObj = endorsement[1]
-    
-    // Create all the elements that we'll use for each list item
-    let li = document.createElement('li')
-    let hTo = document.createElement("h5")
-    let hFrom = document.createElement("h5")
-    let p = document.createElement("p")
-    let pHeart = document.createElement("p")
-    let pDel = document.createElement("p")
-    let divFrom = document.createElement("div")
-    let divTo = document.createElement("div")
-    let spanHeart = document.createElement("span")
-    let spanHeartCount = document.createElement("span")
-    let spanDel = document.createElement("span")
+    const id = endorsement[0]
+    let endorsementData = endorsement[1]
+    const endorsementTo = endorsementData.to
+    const endorsementFrom = endorsementData.from
+    const endorsementMsg = endorsementData.endorsement
 
-    // Initialize the elements with their values 
-    hTo.textContent = `To ${endorsementObj.to}`
-    hFrom.textContent = `From ${endorsementObj.from}`
-    p.textContent = endorsementObj.endorsement
-    spanHeartCount.textContent = endorsementObj.hearts
-    spanHeart.textContent = endorsementObj.hearts > 0 ? "♥" : "♡"
-    spanDel.textContent = "Ⅹ"
-    spanHeartCount.classList.add("span-heart-count")
+    // encode as URI component to get rid of spaces that cause the json bug
+    // when we stringify the endorsement object into the custom data
+    for (const prop in endorsementData) {
+        endorsementData[prop] = encodeURIComponent(endorsementData[prop])
+    }
 
-    // Add any defaults we need
-    pHeart.classList.add("p-btn")
-    pDel.classList.add("p-btn")
+    // stringify the endorsement object
+    const endorsementAsJSONString = (JSON.stringify(endorsementData))
 
-    // Set up event listeners on the delete and heart buttons
-    spanDel.addEventListener("click", function() {
-        let endorsementInDb = ref(db, `endorsements/${id}`)
-        remove(endorsementInDb)
-    })
+    const html = `
+        <li>
+            <div>
+                <h5>To ${endorsementTo}</h5>
+                <p class='p-btn'>
+                    <span data-id=${id} data-type=delete>&#x2715</span>
+                </p>
+            </div>
+            <p>${decodeURIComponent(endorsementMsg)}</p>
+            <div>
+                <h5>From ${endorsementFrom}</h5>
+                <p class='p-btn'>
+                    <span
+                        data-id=${id}
+                        data-type=heart
+                        data-endorsement=${endorsementAsJSONString}>
+                            ${endorsementData.hearts > 0 ? "♥" : "♡"}
+                    </span>
+                    <span class='span-heart-count'>${endorsementData.hearts}</span>
+                </p>
+            </div>
+        </li
+    `
 
-    spanHeart.addEventListener("click", function() {
-        toggleHeart(id, endorsementObj)
-    })
-
-    // Insert all the elements into the parent li
-    pHeart.append(spanHeart)
-    pHeart.append(spanHeartCount)
-
-    pDel.append(spanDel)
-
-    divTo.append(hTo)
-    divTo.append(pDel)
-
-    divFrom.append(hFrom)
-    divFrom.append(pHeart)
-
-    li.append(divTo)
-    li.append(p)
-    li.append(divFrom)
-
-    // Send back the fully built list item
-    return li
+    return html
 }
 
 // Function to get the list item and append it
@@ -102,15 +138,23 @@ function appendEndorsementToList(endorsement) {
     // Grab the element
     const li = buildEndorsementListItem(endorsement)
     // Showtime
-    ulEndorsementsEl.append(li)
+    ulEndorsementsEl.innerHTML += li
 }
 
-// Function for updating endorsement, at the moment just used when we update heart
-// count, but could use this to add an edit feature
-function updateItemInDb(id, endorsementObj) {
+// Function for updating endorsement, at the moment just used when 
+// we update heart count, but could use this to add an edit feature
+function updateItemInDb(id, endorsementData) {
     // Get the ref and update the record
     const endorsementRef = ref(db, `endorsements/${id}`)
-    set(endorsementRef, endorsementObj)
+
+    // decode strings before we push back to the db, do we need to really?
+    // guess we would only have to decode before using when we pull it back
+    // if we didn't, so...swings and roundabouts
+    for (const prop in endorsementData) {
+        endorsementData[prop] = decodeURIComponent(endorsementData[prop])
+    }
+
+    set(endorsementRef, endorsementData)
 }
 
 // Function to add new endorsement to the database
@@ -123,8 +167,7 @@ function clearEndorsementList() {
     ulEndorsementsEl.innerHTML = ""
 }
 
-// Function to clear the inputs - found a differnet way to iterate over an array, 
-// hope this is OK? Any reason not to use it? 
+// Function to clear the inputs
 function clearInputs() {
     const fieldEls = [inptToEl, inptFromEl, inptEndorsementEl]
     for (const fieldEl of fieldEls) {
@@ -135,14 +178,14 @@ function clearInputs() {
 // Function to add/remove heart, update the db with heart count
 // and drop an item in localStorage with the id of the endorsement
 // we liked
-function toggleHeart(id, endorsementObj) {
+function toggleHeart(id, endorsementData) {
     if (hasHearted(id)) {
-        endorsementObj.hearts--
-        updateItemInDb(id, endorsementObj)
+        endorsementData.hearts--
+        updateItemInDb(id, endorsementData)
         localStorage.removeItem(`${id}`)
     } else {
-        endorsementObj.hearts++
-        updateItemInDb(id, endorsementObj)
+        endorsementData.hearts++
+        updateItemInDb(id, endorsementData)
         localStorage.setItem(`${id}`, true)
     }
 }
@@ -152,18 +195,13 @@ function hasHearted(id) {
     return id in localStorage
 }
 
-// Function to check if the specified input element is empty
-function fieldIsEmpty(fieldEl) {
-    return fieldEl.value.length === 0
-}
-
 // Function to add or remove a 'warning' class from a specified input element
 function setFieldWarningClass(fieldEl, shouldSet) {
     shouldSet ? fieldEl.classList.add('inpt-empty-field') : fieldEl.classList.remove('inpt-empty-field')
 }
 
 // Function: insert a specially formatted list item with text to display if there is
-// nothing in the datbase
+// nothing in the database
 function nothingHereYet() {
     clearEndorsementList()
     let li = document.createElement('li')
@@ -172,37 +210,5 @@ function nothingHereYet() {
     ulEndorsementsEl.append(li)
 }
 
-// Set up publish button event listener
-btnPublishEl.addEventListener('click', function() {
 
-    // Test all the fields to see if they are empty, must be a simpler way?
-    let greenLight = true
-    const fieldEls = [inptToEl, inptFromEl, inptEndorsementEl]
 
-    for (const fieldEl of fieldEls) {
-        if (fieldIsEmpty(fieldEl)) {
-            greenLight = false
-            setFieldWarningClass(fieldEl, true);
-        }
-    }
-
-    // If all the fields are filled out, build new obj, push to db, clear input fields
-    if (greenLight) {
-        const newEndorsement = {
-            to: inptToEl.value,
-            from: inptFromEl.value,
-            endorsement: inptEndorsementEl.value,
-            hearts: 0
-        }
-        pushEndorsementToDb(newEndorsement)
-        clearInputs()
-    }
-})
-
-// Add keypress event to revert warning when field no longer empty
-const fieldEls = [inptToEl, inptFromEl, inptEndorsementEl]
-for (const fieldEl of fieldEls) {
-    fieldEl.addEventListener('keypress', function(event) {
-        setFieldWarningClass(fieldEl, false)
-    })
-}
